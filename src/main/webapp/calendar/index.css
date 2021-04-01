@@ -1,0 +1,50 @@
+* {
+  margin: 0;
+  text-align: center;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+.year {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: 1200px;
+}
+
+.year > h1 {
+  width: 100%;
+}
+
+.month {
+  min-width: 250px;
+  margin: 20px;
+}
+
+.month > div {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+.weekday-initial {
+  font-weight: bold;
+}
+
+.day {
+  user-select: none;
+}
+
+.day.selected {
+  background-color: red;
+}
+
+#save-btn {
+  padding: 10px 32px;
+  font-size: 18px;
+  margin-bottom: 40px;
+}
