@@ -38,8 +38,13 @@
       <artifactId>jetty-annotations</artifactId>
       <version>${jetty.version}</version>
     </dependency>
+    <!--DataStore-->
+    <dependency>
+        <groupId>com.google.cloud</groupId>
+        <artifactId>google-cloud-datastore</artifactId>
+        <version>1.104.0</version>
+    </dependency>
   </dependencies>
-
   <build>
     <plugins>
       <!-- Copy static resources like html files into the output jar file. -->
