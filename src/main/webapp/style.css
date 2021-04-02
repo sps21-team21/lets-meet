@@ -1,9 +1,10 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+main {
+    text-align: center;
 }
-
-#greeting-container {
-  margin-top: 20px;
+.jumbotron {
+    background-color: #5688C7;
+    color: aliceblue;
+}
+.btn {
+    background-color: #2C5784;
 }
