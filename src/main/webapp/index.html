@@ -1,19 +1,29 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8">
-    <title>My Portfolio</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-  </head>
-  <body>
-    <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Click <a href="/hello">here</a> to see content created by server code.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
-    </div>
-  </body>
+<!DOCTYPE HTML>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Let's Meet Home Page</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <script src="script.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/home-style.css">
+    </head>
+    <body>
+        <header class="jumbotron text-center">
+            <h1>Let's Meet!</h1>
+            <p>Welcome to Let's Meet! We help you find a time and place to meet your friends, family or colleagues.</p>
+        </header>
+        <main class="container">
+            <div class="row">
+                <div class="col-sm-6">
+                    <p>Create a new meeting and share it!</p>
+                    <button id="create" onclick="createMeeting();" class="btn btn-primary">Create a meeting</button>
+                </div>
+                <div col="col-sm-6">
+                    <p>Enter an already existing meeting.</p>
+                    <button id="join" onclick="joinMeeting();" class="btn btn-primary">Join a room</button>
+                </div>
+            </div>
+        </main>
+    </body>
 </html>
