@@ -41,31 +41,12 @@ saveBtn.addEventListener('click', () => {
         new Date(year, 0, idx + 1),
       ])
       .filter(([isSelected]) => isSelected)
-      .map(([_, date]) => date);
-
-  const selectedRanges = selectedDays
-      .reduce((ranges, date) => {
-        if (ranges.length === 0) {
-          return [[date, date]];
-        }
-        const prevDate = new Date(date.getTime());
-        prevDate.setDate(prevDate.getDate() - 1);
-        if (ranges[ranges.length - 1][1].getTime() === prevDate.getTime()) {
-          ranges[ranges.length - 1][1] = date;
-        } else {
-          ranges.push([date, date]);
-        }
-        return ranges;
-      }, [])
-      .map(([start, end]) => ({
-        start: start.getTime(),
-        end: end.getTime(),
-      }));
+      .map(([_, date]) => date.getTime());
 
   const requestBody = {
-    meeting: 1,
-    user: 1,
-    ranges: selectedRanges,
+    meeting: "--- meeting id ---",
+    user: "--- user ---",
+    days: selectedDays,
   };
 
   fetch('/api/calendar', {
