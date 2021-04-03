@@ -15,6 +15,7 @@
 package com.google.sps.servlets;
 
 import com.google.cloud.datastore.*;
+import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 import com.google.gson.Gson;
 import com.google.sps.data.CalendarUpdate;
 
@@ -26,7 +27,15 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.stream.Collectors;
 
+import static com.google.sps.Constants.*;
+
+/**
+ * This servlet receives requests to fetch and update
+ * the calendar availability of a user in a meeting
+ */
 @WebServlet("/api/calendar")
 public class CalendarServlet extends HttpServlet {
   Datastore datastore;
@@ -41,16 +50,38 @@ public class CalendarServlet extends HttpServlet {
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     BufferedReader reader = new BufferedReader(new InputStreamReader(req.getInputStream()));
     CalendarUpdate update = new Gson().fromJson(reader, CalendarUpdate.class);
-    System.out.println(update);
+    List<LongValue> updatedDays = update.days
+        .stream()
+        .map(LongValue::of)
+        .collect(Collectors.toList());
 
-    // 1. Start transaction
-    // https://cloud.google.com/datastore/docs/concepts/transactions#using_transactions
-    // 2.Remove all previous calendar ranges from /meeting/user
-    // https://cloud.google.com/datastore/docs/concepts/queries#ancestor_queries
-    // 3. Create key factory from ancestors
-    // https://cloud.google.com/datastore/docs/concepts/entities#ancestor_paths
-    // 4. Add all new calendar ranges
-    // https://cloud.google.com/datastore/docs/concepts/entities#creating_an_entity
-    // 5. Commit transaction
+    Transaction txn = datastore.newTransaction();
+    try {
+      Query<Entity> userQuery = queryForUser(update.meeting, update.user);
+      QueryResults<Entity> userResults = txn.run(userQuery);
+      if (!userResults.hasNext()) {
+        throw new RuntimeException("User \"" + update.user + "\" not found");
+      }
+      Entity userEntity = userResults.next();
+      Entity updatedUserEntity = Entity.newBuilder(userEntity)
+          .set(USER_CALENDAR_KEY, updatedDays)
+          .build();
+      txn.update(updatedUserEntity);
+      txn.commit();
+    } finally {
+      if (txn.isActive()) {
+        txn.rollback();
+      }
+    }
+
+    resp.sendError(HttpServletResponse.SC_OK);
+  }
+
+  private Query<Entity> queryForUser(String eventID, String userID) {
+    return Query.newEntityQueryBuilder()
+        .setKind(USER_KIND)
+        .setFilter(PropertyFilter.eq(USER_EVENT_ID_KEY, eventID))
+        .setFilter(PropertyFilter.eq(USER_ID_KEY, userID))
+        .build();
   }
 }

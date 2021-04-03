@@ -37,6 +37,8 @@ import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
+import static com.google.sps.Constants.*;
+
 /**
  * Tries to find an event with the provided ID, if it does, 
  * redirects to page that returns ID of the user, handling exceptions.
@@ -51,9 +53,9 @@ public class EnterRoomServlet extends HttpServlet {
     String sEventID = Jsoup.clean(request.getParameter("event-id"), Whitelist.none()); // event-id is arbitrary for now (needs to be referenced on html file)
     // Run query that looks for the provided ID
     Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-    Query<Entity> query = Query.newEntityQueryBuilder().setKind("Event")
-            .setFilter(PropertyFilter.eq("id", sEventID))
-            .setOrderBy(OrderBy.desc("timestamp"))
+    Query<Entity> query = Query.newEntityQueryBuilder().setKind(EVENT_KIND)
+            .setFilter(PropertyFilter.eq(EVENT_ID_KEY, sEventID))
+            .setOrderBy(OrderBy.desc(EVENT_TIMESTAMP_KEY))
             .build();
     QueryResults<Entity> eventResults = datastore.run(query);
     // Handle event not existing
@@ -63,13 +65,13 @@ public class EnterRoomServlet extends HttpServlet {
         // Generate the new user's ID
         String sUserID = UUID.randomUUID().toString();
         // Create a new User entity with its UUID, and Event UUID
-        KeyFactory keyFactory = datastore.newKeyFactory().setKind("User");
+        KeyFactory keyFactory = datastore.newKeyFactory().setKind(USER_KIND);
         long timestamp = System.currentTimeMillis();
         FullEntity userEntity =
             Entity.newBuilder(keyFactory.newKey())
-                .set("id", sUserID)
-                .set("event-id", sEventID)
-                .set("timestamp", timestamp)
+                .set(USER_ID_KEY, sUserID)
+                .set(USER_EVENT_ID_KEY, sEventID)
+                .set(USER_TIMESTAMP_KEY, timestamp)
                 .build();
         datastore.put(userEntity);
         // redirects page that refers to userID and eventID
