@@ -1,0 +1,13 @@
+/* Main styles */
+main {
+    text-align: center;
+}
+.jumbotron {
+    background-color: #5688C7;
+    color: aliceblue;
+}
+
+/* Button styles */
+.btn {
+    background-color: #2C5784;
+}
