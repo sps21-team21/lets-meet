@@ -19,14 +19,14 @@ import java.util.Date;
 import java.util.List;
 
 public class CalendarUpdate {
-  public String meeting, user;
+  public String event, user;
   public List<Long> days;
 
   @Override
   public String toString() {
     StringBuilder calendarStr = new StringBuilder();
     calendarStr.append("CalendarUpdate {\n");
-    calendarStr.append("\tmeeting: \"").append(meeting).append("\",\n");
+    calendarStr.append("\tevent: \"").append(event).append("\",\n");
     calendarStr.append("\tuser: \"").append(user).append("\",\n");
     calendarStr.append("\tdays: [\n");
     days

@@ -44,8 +44,8 @@ saveBtn.addEventListener('click', () => {
       .map(([_, date]) => date.getTime());
 
   const requestBody = {
-    meeting: "--- meeting id ---",
-    user: "--- user ---",
+    event: "--- event id ---",
+    user: "--- user id ---",
     days: selectedDays,
   };
 

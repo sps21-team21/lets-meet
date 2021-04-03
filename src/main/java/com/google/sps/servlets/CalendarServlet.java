@@ -57,7 +57,7 @@ public class CalendarServlet extends HttpServlet {
 
     Transaction txn = datastore.newTransaction();
     try {
-      Query<Entity> userQuery = queryForUser(update.meeting, update.user);
+      Query<Entity> userQuery = queryForUser(update.event, update.user);
       QueryResults<Entity> userResults = txn.run(userQuery);
       if (!userResults.hasNext()) {
         throw new RuntimeException("User \"" + update.user + "\" not found");
@@ -73,8 +73,6 @@ public class CalendarServlet extends HttpServlet {
         txn.rollback();
       }
     }
-
-    resp.sendError(HttpServletResponse.SC_OK);
   }
 
   private Query<Entity> queryForUser(String eventID, String userID) {
