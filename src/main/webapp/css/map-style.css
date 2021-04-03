@@ -1,4 +1,11 @@
 /* Main styles */
 #map {
-    height: 70%;
+  border: thin solid black;
+  height: 500px;
+  width: 500px;
+}
+
+/* Button styles */
+.btn {
+    background-color: #94B4DB;
 }
