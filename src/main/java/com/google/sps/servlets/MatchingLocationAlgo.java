@@ -1,16 +1,10 @@
-package main.java.com.google.sps.servlets;
+package com.google.sps.servlets;
 
 
-import com.google.appengine.repackaged.com.google.type.LatLng;
-import com.google.cloud.datastore.Datastore;
-import com.google.cloud.datastore.DatastoreOptions;
-import com.google.cloud.datastore.Entity;
-import com.google.cloud.datastore.Query;
-import com.google.cloud.datastore.QueryResults;
-import com.google.cloud.datastore.StructuredQuery.OrderBy;
+import com.google.cloud.datastore.*;
+import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 import com.google.gson.Gson;
-import com.google.gwt.thirdparty.guava.common.collect.Maps;
-import static com.google.sps.Constants.*;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -21,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.*; 
 import java.time.format.DateTimeFormatter;
-
+import com.google.maps.*;
 
 
 @WebServlet("/MatchingAlgoLocation")
@@ -35,10 +29,10 @@ public class MatchingLocationAlgo extends HttpServlet {
         Query<Entity> query = Query.newEntityQueryBuilder().setKind("Event").setFilter(PropertyFilter.eq("event-id", currEvent)).build();
         QueryResults<Entity> results = datastore.run(query);
 
-        //this will effectively create a perimiter around the locations.
-        //from there it is easy to calculate middle
+        //this will effectively create a perimiter around the locations. From there it is easy to calculate middle
         //https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngBounds
-        LatLngBounds rectangleFromPoints = new com.google.maps.LatLngBounds();
+        //apparently the java google maps package doesn't support LatLngBounds, only javascript ヽ༼ ಠ益ಠ ༽ﾉ
+        LatLngBounds rectangleFromPoints = new LatLngBounds();
 
         //the week 3 maps tutorial only used javascript, maybe thats why imports are funky
         //check out https://github.com/googlemaps/google-maps-services-java
@@ -46,7 +40,7 @@ public class MatchingLocationAlgo extends HttpServlet {
         //get the objects from the query, and add to rectangle
         while (results.hasNext()) {
             Entity entity = results.next();
-            LatLng temp = entity.getGeoPointValue("location");
+            LatLng temp = entity.getLatLng("location");
             rectangleFromPoints.extend(temp);
 
         }

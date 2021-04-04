@@ -1,22 +1,18 @@
 
-package main.java.com.google.sps.servlets;
+package com.google.sps.servlets;
 
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.google.cloud.datastore.*;
-import com.google.cloud.datastore.Datastore;
-import com.google.cloud.datastore.DatastoreOptions;
-import com.google.cloud.datastore.Entity;
-import com.google.cloud.datastore.FullEntity;
-import com.google.cloud.datastore.KeyFactory;
+import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 import com.google.gson.Gson;
-import com.google.sps.data.Event;
+
+import java.io.IOException;
+import java.util.List;
 import java.util.HashSet;
 
 @WebServlet("/MatchingAlgoDate")
@@ -39,16 +35,16 @@ public class MatchingDateAlgo extends HttpServlet {
         QueryResults<Entity> results = datastore.run(query);
         while (results.hasNext()) {
             Entity entity = results.next();
-            userDays = entity.getArrayData("dates");
+            userDays = entity.getValue("dates");
             if(GoodDates.isEmpty()){
                 for(int i = 0; i < userDays.size(); i++){
-                    GoodDates.add(userDays[i]);
+                    GoodDates.add(userDays.get(i));
                 }
             }
             else{
                 for(int i = 0; i < userDays.size(); i++){
-                    if(GoodDates.cotains(userDays[i])){
-                        temps.add(userDays[i]);
+                    if(GoodDates.contains(userDays.get(i))){
+                        temps.add(userDays.get(i));
                     }
                 }
                 GoodDates = temps;
@@ -58,7 +54,7 @@ public class MatchingDateAlgo extends HttpServlet {
         
         Gson bson = new Gson();
         response.setContentType("application/json;");
-        response.getWriter().println(bson.toJson(Center));
+        response.getWriter().println(bson.toJson(GoodDates));
     }
 }
 
