@@ -27,12 +27,11 @@ import java.lang.Math.*;
 
 @WebServlet("/MatchingAlgoLocation")
 public class MatchingLocationAlgo extends HttpServlet {
-    /*
+    
     //option 2, where we process the center here in the servlet manually using math.
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
-        
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         String currEvent = request.getParameter("text-input");
         Query<Entity> query = Query.newEntityQueryBuilder().setKind("Event").setFilter(PropertyFilter.eq("event-id", currEvent)).build();
@@ -72,13 +71,15 @@ public class MatchingLocationAlgo extends HttpServlet {
         trueZ = trueZ / zs.size();
 
         Double Hypo = Math.sqrt(trueX * trueX + trueY * trueY);
-        LatLng Center = new LatLng(Math.atan2(trueZ, Hypo), Math.atan2(trueX,trueY));
+        //LatLng Center = new LatLng(Math.atan2(trueZ, Hypo)*180/(Math.PI), Math.atan2(trueX,trueY)*180/(Math.PI));
+        //apparently LatLng constructor is private
+        Double[] Center = {Math.atan2(trueX,trueY)*180/(Math.PI), Math.atan2(trueZ, Hypo)*180/(Math.PI)};
         Gson bson = new Gson();
         response.setContentType("application/json;");
         response.getWriter().println(bson.toJson(Center));
     }
-    */
     
+    /*
     //option 1, where we send points to javascript page and process them there.
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -118,6 +119,7 @@ public class MatchingLocationAlgo extends HttpServlet {
         response.setContentType("application/json;");
         response.getWriter().println(bson.toJson(points));
     }
+    */
 }
 
 
