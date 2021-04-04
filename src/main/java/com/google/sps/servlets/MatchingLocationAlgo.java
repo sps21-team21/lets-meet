@@ -13,8 +13,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.*; 
-import java.time.format.DateTimeFormatter;
 import java.lang.Math.*;
 //import com.google.maps.*;
 //import com.google.android.gms.maps.model;
@@ -27,7 +25,6 @@ import java.lang.Math.*;
 
 @WebServlet("/MatchingAlgoLocation")
 public class MatchingLocationAlgo extends HttpServlet {
-    
     //option 2, where we process the center here in the servlet manually using math.
     @Override
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -70,14 +67,14 @@ public class MatchingLocationAlgo extends HttpServlet {
         trueY = trueY / ys.size();
         trueZ = trueZ / zs.size();
 
-        Double Hypo = Math.sqrt(trueX * trueX + trueY * trueY);
-        //LatLng Center = new LatLng(Math.atan2(trueZ, Hypo)*180/(Math.PI), Math.atan2(trueX,trueY)*180/(Math.PI));
-        //apparently LatLng constructor is private
-        Double[] Center = {Math.atan2(trueX,trueY)*180/(Math.PI), Math.atan2(trueZ, Hypo)*180/(Math.PI)};
+        Double Hypo = Math.sqrt((trueX * trueX) + (trueY * trueY));
+        Double[] Center = {Math.atan2(trueZ, Hypo)*180/(Math.PI), Math.atan2(trueY,trueX)*180/(Math.PI)};
         Gson bson = new Gson();
         response.setContentType("application/json;");
         response.getWriter().println(bson.toJson(Center));
+        
     }
+        
     
     /*
     //option 1, where we send points to javascript page and process them there.
