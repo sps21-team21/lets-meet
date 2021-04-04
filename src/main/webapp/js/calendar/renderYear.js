@@ -1,3 +1,11 @@
+const generateMonthsSizesList = (year) =>
+  [...Array(12).keys()].map(
+    (monthIdx) =>
+      [...Array(31).keys()]
+        .map((dayIdx) => new Date(year, monthIdx, dayIdx + 1))
+        .filter((date) => date.getMonth() === monthIdx).length,
+  );
+
 const renderYear = (year, container) => {
   container.innerHTML = `<h1>${year}</h1>`;
 
@@ -16,13 +24,7 @@ const renderYear = (year, container) => {
       return monthElement;
     });
 
-  const daysList = [...Array(12).keys()]
-    .map(
-      (monthIdx) =>
-        [...Array(31).keys()]
-          .map((dayIdx) => new Date(year, monthIdx, dayIdx + 1))
-          .filter((date) => date.getMonth() === monthIdx).length,
-    )
+  const daysList = generateMonthsSizesList(year)
     .map((daysCount) =>
       [...Array(daysCount).keys()].map((dayIdx) => {
         const dayElement = document.createElement('div');

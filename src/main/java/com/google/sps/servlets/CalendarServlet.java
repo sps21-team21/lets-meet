@@ -47,6 +47,27 @@ public class CalendarServlet extends HttpServlet {
   }
 
   @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    String event = req.getParameter("event");
+    String user = req.getParameter("user");
+    Query<Entity> userQuery = queryForUser(event, user);
+    QueryResults<Entity> userResults = datastore.run(userQuery);
+    if (!userResults.hasNext()) {
+      throw new RuntimeException("User \"" + user + "\" not found");
+    }
+    Entity userEntity = userResults.next();
+    List<LongValue> datastoreDays = List.of();
+    try {
+     datastoreDays = userEntity.getList(USER_CALENDAR_KEY);
+    } catch (DatastoreException ignored) {
+    }
+    List<Long> days = datastoreDays.stream().map(Value::get).collect(Collectors.toList());
+    String jsonDaysList = new Gson().toJson(days);
+    resp.setContentType("application/json;");
+    resp.getWriter().println(jsonDaysList);
+  }
+
+  @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     BufferedReader reader = new BufferedReader(new InputStreamReader(req.getInputStream()));
     CalendarUpdate update = new Gson().fromJson(reader, CalendarUpdate.class);
