@@ -2,10 +2,9 @@ const year = new Date().getFullYear();
 const container = document.getElementsByClassName('year')[0];
 const daysList = renderYear(year, container);
 
-const eventId = '--- event id ---';
-const userId = '--- user id ---';
+const apiUrl = `/api/calendar${window.location.search}`;
 
-fetch(`/api/calendar?event=${eventId}&user=${userId}`)
+fetch(apiUrl)
   .then((res) => res.json())
   .then((res) => {
     const daysDateList = generateMonthsSizesList(
@@ -64,15 +63,9 @@ saveBtn.addEventListener('click', () => {
     .filter(([isSelected]) => isSelected)
     .map(([_, date]) => date.getTime());
 
-  const requestBody = {
-    event: eventId,
-    user: userId,
-    days: selectedDays,
-  };
-
-  fetch('/api/calendar', {
+  fetch(apiUrl, {
     method: 'POST',
-    body: JSON.stringify(requestBody),
+    body: JSON.stringify(selectedDays),
   }).then((res) => {
     if (res.ok) {
       alert('Calendar saved successfully!');

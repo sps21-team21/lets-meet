@@ -17,7 +17,7 @@ package com.google.sps.servlets;
 import com.google.cloud.datastore.*;
 import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 import com.google.gson.Gson;
-import com.google.sps.data.CalendarUpdate;
+import com.google.gson.reflect.TypeToken;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,13 +53,10 @@ public class CalendarServlet extends HttpServlet {
     String user = req.getParameter("user");
     Query<Entity> userQuery = queryForUser(event, user);
     QueryResults<Entity> userResults = datastore.run(userQuery);
-    if (!userResults.hasNext()) {
-      throw new RuntimeException("User \"" + user + "\" not found");
-    }
-    Entity userEntity = userResults.next();
+    Entity userEntity = assertUserFound(userResults, user);
     List<LongValue> datastoreDays = List.of();
     try {
-     datastoreDays = userEntity.getList(USER_CALENDAR_KEY);
+      datastoreDays = userEntity.getList(USER_CALENDAR_KEY);
     } catch (DatastoreException ignored) {
     }
     List<Long> days = datastoreDays.stream().map(Value::get).collect(Collectors.toList());
@@ -69,21 +67,21 @@ public class CalendarServlet extends HttpServlet {
 
   @Override
   protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+    String event = req.getParameter("event");
+    String user = req.getParameter("user");
     BufferedReader reader = new BufferedReader(new InputStreamReader(req.getInputStream()));
-    CalendarUpdate update = new Gson().fromJson(reader, CalendarUpdate.class);
-    List<LongValue> updatedDays = update.days
+    Type listOfLongs = new TypeToken<List<Long>>() {}.getType();
+    List<Long> days = new Gson().fromJson(reader, listOfLongs);
+    List<LongValue> updatedDays = days
         .stream()
         .map(LongValue::of)
         .collect(Collectors.toList());
 
     Transaction txn = datastore.newTransaction();
     try {
-      Query<Entity> userQuery = queryForUser(update.event, update.user);
+      Query<Entity> userQuery = queryForUser(event, user);
       QueryResults<Entity> userResults = txn.run(userQuery);
-      if (!userResults.hasNext()) {
-        throw new RuntimeException("User \"" + update.user + "\" not found");
-      }
-      Entity userEntity = userResults.next();
+      Entity userEntity = assertUserFound(userResults, user);
       Entity updatedUserEntity = Entity.newBuilder(userEntity)
           .set(USER_CALENDAR_KEY, updatedDays)
           .build();
@@ -102,5 +100,12 @@ public class CalendarServlet extends HttpServlet {
         .setFilter(PropertyFilter.eq(USER_EVENT_ID_KEY, eventID))
         .setFilter(PropertyFilter.eq(USER_ID_KEY, userID))
         .build();
+  }
+
+  private Entity assertUserFound(QueryResults<Entity> userResults, String userId) {
+    if (!userResults.hasNext()) {
+      throw new RuntimeException("User \"" + userId + "\" not found");
+    }
+    return userResults.next();
   }
 }
