@@ -4,7 +4,7 @@ package com.google.sps.servlets;
 import com.google.cloud.datastore.*;
 import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 import com.google.gson.Gson;
-
+import static com.google.sps.Constants.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,12 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.Math.*;
-//import com.google.maps.*;
-//import com.google.android.gms.maps.model;
-//import com.amap.api.maps.model.LatLngBounds;
-//import com.amap.api.maps.model.LatLngBounds;
-//import com.google.code.geocoder-java.*;
-//import org.primefaces.model.map.LatLngBounds;
 
 
 //This could be very useful for turning returned lat/lng into a city name https://developers.google.com/maps/documentation/javascript/examples/geocoding-reverse
@@ -31,7 +25,7 @@ public class MatchingLocationAlgo extends HttpServlet {
     
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         String currEvent = request.getParameter("text-input");
-        Query<Entity> query = Query.newEntityQueryBuilder().setKind("Event").setFilter(PropertyFilter.eq("event-id", currEvent)).build();
+        Query<Entity> query = Query.newEntityQueryBuilder().setKind(USER_KIND).setFilter(PropertyFilter.eq(USER_EVENT_ID_KEY, currEvent)).build();
         QueryResults<Entity> results = datastore.run(query);
 
         ArrayList<Double> lats =  new ArrayList<>();
@@ -39,7 +33,7 @@ public class MatchingLocationAlgo extends HttpServlet {
 
         while (results.hasNext()) {
             Entity entity = results.next();
-            LatLng temp = entity.getLatLng("location");
+            LatLng temp = entity.getLatLng(USER_LOCATION_KEY);
             lats.add(temp.getLatitude()*Math.PI/180);
             longs.add(temp.getLongitude()*Math.PI/180);
 

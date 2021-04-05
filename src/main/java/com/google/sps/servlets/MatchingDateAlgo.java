@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.google.cloud.datastore.*;
 import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 import com.google.gson.Gson;
+import static com.google.sps.Constants.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -31,11 +32,11 @@ public class MatchingDateAlgo extends HttpServlet {
         //get objects in datastore
         Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
         String currEvent = request.getParameter("text-input");
-        Query<Entity> query = Query.newEntityQueryBuilder().setKind("Event").setFilter(PropertyFilter.eq("event-id", currEvent)).build();
+        Query<Entity> query = Query.newEntityQueryBuilder().setKind(USER_KIND).setFilter(PropertyFilter.eq(USER_EVENT_ID_KEY, currEvent)).build();
         QueryResults<Entity> results = datastore.run(query);
         while (results.hasNext()) {
             Entity entity = results.next();
-            userDays = entity.getList("dates");
+            userDays = entity.getList(USER_CALENDAR_KEY);
             if(GoodDates.isEmpty()){
                 for(int i = 0; i < userDays.size(); i++){
                     GoodDates.add(userDays.get(i));
