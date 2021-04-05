@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.google.sps</groupId>
-  <artifactId>portfolio</artifactId>
+  <artifactId>lets-meet</artifactId>
   <version>1</version>
 
   <properties>
@@ -56,7 +56,6 @@
         <artifactId>jsoup</artifactId>
         <version>1.8.3</version>
     </dependency>
-
   </dependencies>
   <build>
     <plugins>
