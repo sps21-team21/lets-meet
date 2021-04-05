@@ -22,7 +22,7 @@ import java.lang.Math.*;
 //import org.primefaces.model.map.LatLngBounds;
 
 
-
+//This could be very useful for turning returned lat/lng into a city name https://developers.google.com/maps/documentation/javascript/examples/geocoding-reverse
 @WebServlet("/MatchingAlgoLocation")
 public class MatchingLocationAlgo extends HttpServlet {
     //option 2, where we process the center here in the servlet manually using math.
@@ -45,6 +45,7 @@ public class MatchingLocationAlgo extends HttpServlet {
 
         }
 
+        //convert lats and longs to spherical coordinates
         ArrayList<Double> xs =  new ArrayList<>();
         ArrayList<Double> ys =  new ArrayList<>();
         ArrayList<Double> zs =  new ArrayList<>();
@@ -74,49 +75,6 @@ public class MatchingLocationAlgo extends HttpServlet {
         response.getWriter().println(bson.toJson(Center));
         
     }
-        
-    
-    /*
-    //option 1, where we send points to javascript page and process them there.
-    @Override
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
-        //get objects in datastore
-        Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-        String currEvent = request.getParameter("text-input");
-        Query<Entity> query = Query.newEntityQueryBuilder().setKind("Event").setFilter(PropertyFilter.eq("event-id", currEvent)).build();
-        QueryResults<Entity> results = datastore.run(query);
-
-        //this will effectively create a perimiter around the locations. From there it is easy to calculate middle
-        //https://developers.google.com/maps/documentation/javascript/reference/coordinates#LatLngBounds
-        //apparently the java google maps package doesn't support LatLngBounds, only javascript ヽ༼ ಠ益ಠ ༽ﾉ
-        //move finding center to javascript, and leave java to retrieve points?
-        //LatLngBounds rectangleFromPoints = new LatLngBounds();
-        
-        //the week 3 maps tutorial only used javascript, maybe thats why imports are funky
-        //check out https://github.com/googlemaps/google-maps-services-java
-
-        ArrayList<LatLng> points =  new ArrayList<>();
-        //get the objects from the query, and add to rectangle
-        while (results.hasNext()) {
-            Entity entity = results.next();
-            LatLng temp = entity.getLatLng("location");            
-            points.add(temp);
-            //rectangleFromPoints.extend(temp);
-            
-        }
-
-        //now we have our rectangle, so we need to find the center
-        //https://developers.google.com/maps/documentation/javascript/reference/map#Map.getCenter
-        //LatLng Center = rectangleFromPoints.getCenter();
-        
-        //now we can return that point
-        //return Center
-        Gson bson = new Gson();
-        response.setContentType("application/json;");
-        response.getWriter().println(bson.toJson(points));
-    }
-    */
 }
 
 

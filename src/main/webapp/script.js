@@ -26,16 +26,3 @@ function addRandomGreeting() {
   const greetingContainer = document.getElementById('greeting-container');
   greetingContainer.innerText = greeting;
 }
-
-/*
-async function getCenter(){
-    const responseFromServer = await fetch('/MatchingAlgoLocation');
-    const PointsList = await responseFromServer.json();
-    var rectangleFromPoints = new google.maps.LatLngBounds();
-    for (i = 0; i < PointsList.length; i++) {
-        rectangleFromPoints.extend(PointsList);
-    }
-    var center = bound.getCenter();
-        
-}
-*/
