@@ -19,9 +19,15 @@
                     <p>Create a new meeting and share it!</p>
                     <button id="create" onclick="getRoom();" class="btn btn-primary btn-lg">Create a meeting</button>
                 </div>
-                <div col="col-sm-6">
-                    <p>Enter an already existing meeting.</p>
-                    <button id="join" onclick="joinMeeting();" class="btn btn-primary btn-lg">Join a room</button>
+                <div class="centered-element">
+                    <div col="col-sm-6">
+                        <form action="/enter-room" method="POST">
+                        <p>Enter an already existing meeting.</p>
+                        <div><textarea style="resize: none;" name="event-id"></textarea></div>
+                        <br/>
+                        <input class="function-button" type="submit"/>
+                        </form>
+                    </div>
                 </div>
             </div>
             <br><br>
