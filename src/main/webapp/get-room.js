@@ -13,6 +13,9 @@ function CopyToClipboard(containerid) {
     document.execCommand("copy");
     window.getSelection().removeAllRanges();
   }
+  // Disable button
+  const button = document.querySelector('button');
+  button.disabled = true;
 }
 /** Fetches the event ID created from the server. */
 async function getRoom() {
@@ -33,6 +36,7 @@ async function getRoom() {
     eventIDContainer.appendChild(header);
     // Add button
     var button = document.createElement("BUTTON");
+    button.id = "clipboard-button";
     button.onclick = CopyToClipboard('header');
     button.className = "clipboard-button";
     // Add button image
