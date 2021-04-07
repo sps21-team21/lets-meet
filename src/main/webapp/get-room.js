@@ -10,6 +10,7 @@ function CopyToClipboard(containerid) {
     range.selectNode(document.getElementById(containerid));
     window.getSelection().addRange(range);
     document.execCommand("copy");
+    window.getSelection().removeAllRanges();
   }
 }
 /** Fetches the event ID created from the server. */
