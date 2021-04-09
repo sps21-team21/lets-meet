@@ -7,6 +7,18 @@ body {
   font-family: sans-serif;
 }
 
+header {
+  background-color: #5688C7 !important;
+  color: aliceblue !important;
+}
+
+#back-btn {
+  float: left;
+  left: 48px;
+  font-size: 44px;
+  cursor: pointer;
+}
+
 .year {
   display: flex;
   flex-direction: row;
@@ -40,11 +52,12 @@ body {
 }
 
 .day.selected {
-  background-color: red;
+  background-color: #5688C7;
 }
 
 #save-btn {
   padding: 10px 32px;
   font-size: 18px;
   margin-bottom: 40px;
+  background-color: #2C5784;
 }
