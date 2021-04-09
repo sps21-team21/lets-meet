@@ -1,8 +1,16 @@
 /* Main styles */
+body {
+    text-align: center;
+}
+
 #map {
-  border: thin solid black;
   height: 500px;
-  width: 500px;
+  width: 700px;
+  margin: auto;
+}
+
+p{
+    padding: 10px;
 }
 
 /* Button styles */
