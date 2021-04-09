@@ -1,3 +1,8 @@
+const backBtn = document.getElementById('back-btn');
+backBtn.addEventListener('click', () => {
+  window.history.back();
+});
+
 const year = new Date().getFullYear();
 const container = document.getElementsByClassName('year')[0];
 const daysList = renderYear(year, container);

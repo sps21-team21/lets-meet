@@ -5,11 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Calendar</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <link rel="stylesheet" href="./css/calendar.css" />
   </head>
   <body>
+    <header class="jumbotron text-center">
+      <span id="back-btn" class="glyphicon glyphicon-arrow-left"></span>
+      <h1>Enter your calendar availability!</h1>
+    </header>
     <div class="year"></div>
-    <button id="save-btn">Save</button>
+    <button id="save-btn" class="btn btn-primary btn-lg">Save</button>
   </body>
   <script src="./js/calendar/weekdays.js"></script>
   <script src="./js/calendar/renderYear.js"></script>
