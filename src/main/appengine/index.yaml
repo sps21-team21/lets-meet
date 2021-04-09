@@ -1,0 +1,8 @@
+# After changing this, run gcloud app deploy src/main/appengine/index.yaml
+
+indexes:
+- kind: Event
+  properties:
+  - name: id
+  - name: timestamp
+    direction: desc
