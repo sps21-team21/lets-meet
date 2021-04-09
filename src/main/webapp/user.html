@@ -2,11 +2,32 @@
 <html>
   <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>User page</title>
-    <link rel="stylesheet" href="style.css"> <!--The styling reference might need a change later-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/user-style.css">
     <script src="user-data.js"></script>
   </head>
-  <body onload=showUserData()>
-    <div id="user-ID-container"></div>
+  <body>
+    <header class="jumbotron text-center">
+        <h1>Let's Meet!</h1>
+        <h2>Share your preferences on time and place and we'll do the rest!</h2>
+    </header>
+    <main class="container">
+        <div class="row">
+            <div class="col-sm-6">
+                <h3>📍 Share your location!</h3>
+                <br>
+                <button onclick="getRoom();" class="btn btn-primary btn-lg">Submit location</button>
+            </div>
+            <div class="col-sm-6">
+                <h3>📅 Enter the dates you prefer!</h3>
+                <br>
+                <button id="calendar-page-button" onclick="redirectToCalendarPage();" class="btn btn-primary btn-lg">
+                    Choose dates
+                </button>
+            </div>
+        </div>
+    </main>
   </body>
 </html>

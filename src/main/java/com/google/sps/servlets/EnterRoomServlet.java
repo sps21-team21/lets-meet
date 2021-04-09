@@ -75,7 +75,7 @@ public class EnterRoomServlet extends HttpServlet {
                 .build();
         datastore.put(userEntity);
         // redirects page that refers to userID and eventID
-        response.sendRedirect("/user.html?room=" + sEventID + "&user=" + sUserID); // html will call this servlet that handles user creation
+        response.sendRedirect("/user.html?event=" + sEventID + "&user=" + sUserID); // html will call this servlet that handles user creation
     }
   }
 }
