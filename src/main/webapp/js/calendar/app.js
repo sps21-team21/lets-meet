@@ -1,6 +1,15 @@
 const backBtn = document.getElementById('back-btn');
 backBtn.addEventListener('click', () => {
-  window.history.back();
+    // parse URL to get data
+    const url = new URL(window.location.href);
+    const user = url.searchParams.get('user');
+    const event = url.searchParams.get('event');
+    // Send user to calendar page
+    const params = new URLSearchParams({
+        event: event,
+        user: user
+    });
+    window.location.replace("user.html?" + params.toString())
 });
 
 const year = new Date().getFullYear();
