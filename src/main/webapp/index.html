@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Let's Meet Home Page</title>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <script src="script.js"></script>
+        <script src="get-room.js"></script>
         <link rel="stylesheet" type="text/css" href="css/home-style.css">
     </head>
     <body>
@@ -17,13 +17,16 @@
             <div class="row">
                 <div class="col-sm-6">
                     <p>Create a new meeting and share it!</p>
-                    <button id="create" onclick="createMeeting();" class="btn btn-primary btn-lg">Create a meeting</button>
+                    <button id="create" onclick="getRoom();" class="btn btn-primary btn-lg">Create a meeting</button>
                 </div>
                 <div col="col-sm-6">
                     <p>Enter an already existing meeting.</p>
                     <button id="join" onclick="joinMeeting();" class="btn btn-primary btn-lg">Join a room</button>
                 </div>
             </div>
+            <br><br>
+            <div id="event-message-container"></div>
+            <div id="event-ID-container"></div>
         </main>
     </body>
 </html>
