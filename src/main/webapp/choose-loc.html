@@ -5,15 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Choose location</title>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYDsrxY_orBgsxZIbzSwuarJPfID996UE"></script>
-        <script type="text/javascript" src="script.js"></script>
+        <script type="text/javascript" src="map-script.js"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-        <link type="text/css" type="text/css" href="css/map-style.css"></style>
+        <link rel="stylesheet" type="text/css" href="css/map-style.css">
     </head>
     <body onload="createMap()">
-        <div class="page-header">
+        <header class="page-header">
             <h1>Choose your location</h1>
-        </div>
+            <p>Enable your location for it to be automatically chosen or click over the map wherever you want to choose.</p>
+        </header>
         <div id="map"></div>
-        <button onclick="sendLocation()" class="btn btn-default">Next</button>
+        <p><button onclick="sendLocation()" class="btn btn-default">Continue</button></p>
     </body>
 </html>
