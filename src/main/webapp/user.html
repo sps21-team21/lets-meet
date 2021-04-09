@@ -8,7 +8,7 @@
     <link rel="stylesheet" type="text/css" href="css/user-style.css">
     <script src="user-data.js"></script>
   </head>
-  <body onload=showUserData()>
+  <body>
     <header class="jumbotron text-center">
         <h1>Let's Meet!</h1>
         <h2>Share your preferences on time and place and we'll do the rest!</h2>
@@ -18,12 +18,14 @@
             <div class="col-sm-6">
                 <h3>📍 Share your location!</h3>
                 <br>
-                <button id="create" onclick="getRoom();" class="btn btn-primary btn-lg">Submit location</button>
+                <button onclick="getRoom();" class="btn btn-primary btn-lg">Submit location</button>
             </div>
             <div class="col-sm-6">
                 <h3>📅 Enter the dates you prefer!</h3>
                 <br>
-                <button id="create" onclick="getRoom();" class="btn btn-primary btn-lg">Choose dates</button>
+                <button id="calendar-page-button" onclick="redirectToCalendarPage();" class="btn btn-primary btn-lg">
+                    Choose dates
+                </button>
             </div>
         </div>
     </main>
