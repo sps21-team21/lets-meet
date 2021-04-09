@@ -8,8 +8,8 @@ async function showUserData() {
     const userDataContainer = document.getElementById('user-ID-container');
     var headerUser = document.createElement('h2');
     var headerRoom = document.createElement('h2');
-    headerUser.append(user);
-    headerRoom.append(room);
+    headerUser.append("User ID: " + user);
+    headerRoom.append("Room ID: " + room);
     userDataContainer.appendChild(headerUser);
     userDataContainer.appendChild(headerRoom);
 }
