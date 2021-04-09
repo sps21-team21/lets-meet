@@ -26,11 +26,11 @@ async function getRoom() {
     const eventMessageContainer = document.getElementById('event-message-container');
     const buttonClipboardContainer = document.getElementById('button-clipboard-container');
     // Add info paragraph
-    var paragraph = document.createElement('p');
+    var paragraph = document.createElement('h3');
     paragraph.append("This is your new Event ID for you to share!")
     eventMessageContainer.appendChild(paragraph)
     // Add header with EventID
-    var header = document.createElement('h2');
+    var header = document.createElement('h4');
     header.id = 'header';
     header.append(eventData.id);
     eventIDContainer.appendChild(header);

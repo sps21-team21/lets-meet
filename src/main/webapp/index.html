@@ -11,18 +11,20 @@
     <body>
         <header class="jumbotron text-center">
             <h1>Let's Meet!</h1>
-            <p>Welcome to Let's Meet! We help you find a time and place to meet your friends, family or colleagues.</p>
+            <h2>Welcome to Let's Meet! We help you find a time and place to meet your friends, family or colleagues.</h2>
         </header>
         <main class="container">
             <div class="row">
                 <div class="col-sm-6">
-                    <p>Create a new meeting and share it!</p>
+                    <h3>Create a new meeting and share it!</h3>
+                    <br>
                     <button id="create" onclick="getRoom();" class="btn btn-primary btn-lg">Create a meeting</button>
                 </div>
                 <div class="centered-element">
                     <div col="col-sm-6">
                         <form action="/enter-room" method="POST">
-                        <p>Enter an already existing meeting.</p>
+                        <h3>Enter an already existing meeting.</h3>
+                        <br>
                         <div><textarea style="resize: none;" name="event-id"></textarea></div>
                         <br/>
                         <input class="function-button" type="submit" value="Join a room"/>

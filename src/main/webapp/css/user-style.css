@@ -1,0 +1,33 @@
+/* Main styles */
+main {
+    text-align: center;
+}
+.jumbotron {
+    background-color: #5688C7;
+    color: aliceblue;
+}
+
+/* Button styles */
+.btn {
+    background-color: #2C5784;
+}
+
+.centered-element {
+    display: flex;
+    justify-content: center;
+}
+
+.function-button {
+    transition-duration: 0.4s;
+    background-color: #2C5784;
+    color: aliceblue;
+    padding: 15px 32 px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+
+.function-button:hover {
+    background-color: #5688C7;
+}
