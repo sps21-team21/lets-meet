@@ -14,7 +14,20 @@
 
 /** Creates and manages map */
 function createMap() {
+    const url = new URL(window.location.href);
+    const user = url.searchParams.get('user');
+    const event = url.searchParams.get('event');
+    const params = new URLSearchParams({
+        event: event,
+        user: user
+    });
+
     var coords = new google.maps.LatLng(37.422, -122.084);
+
+    if (getLocation() != null) {
+        const coords = Object.values(getLocation());
+        coords = new google.maps.LatLng(coords[0], coords[1]);
+    }
 
     const map = new google.maps.Map(
         document.getElementById('map'),
@@ -44,9 +57,23 @@ function createMap() {
         pos_marker.setMap(map);
         pos_marker.position = coords;
         pos_marker.center = coords;
+        saveLocation(event.latLng.lat(), event.latLng.lng());
     });
 }
 
-function sendLocation() {
-    window.location.href = "calendar.html";
+function saveLocation(lat, lng) {
+    const params = new URLSearchParams();
+    params.append('lat', lat);
+    params.append('lng', lng);
+
+    fetch('/translate', {
+        method: 'POST',
+        body: params
+    });
+}
+
+function getLocation() {
+    const responseServ = await fetch('/api/maps');
+    const respObj = await responseServ.json();
+    return respObj;
 }
