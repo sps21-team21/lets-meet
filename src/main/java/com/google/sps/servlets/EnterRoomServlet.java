@@ -78,4 +78,37 @@ public class EnterRoomServlet extends HttpServlet {
         response.sendRedirect("/user.html?event=" + sEventID + "&user=" + sUserID); // html will call this servlet that handles user creation
     }
   }
+
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+    // Sanitize user input to remove HTML tags and JavaScript.
+    String sEventID = Jsoup.clean(request.getParameter("event-id"), Whitelist.none()); // event-id is arbitrary for now (needs to be referenced on html file)
+    // Run query that looks for the provided ID
+    Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+    Query<Entity> query = Query.newEntityQueryBuilder().setKind(EVENT_KIND)
+            .setFilter(PropertyFilter.eq(EVENT_ID_KEY, sEventID))
+            .setOrderBy(OrderBy.desc(EVENT_TIMESTAMP_KEY))
+            .build();
+    QueryResults<Entity> eventResults = datastore.run(query);
+    // Handle event not existing
+    if (!eventResults.hasNext()) {
+        response.sendRedirect("/event-not-found.html"); // name of the page is arbitrary, needs to be added
+    } else {
+        // Generate the new user's ID
+        String sUserID = UUID.randomUUID().toString();
+        // Create a new User entity with its UUID, and Event UUID
+        KeyFactory keyFactory = datastore.newKeyFactory().setKind(USER_KIND);
+        long timestamp = System.currentTimeMillis();
+        FullEntity userEntity =
+            Entity.newBuilder(keyFactory.newKey())
+                .set(USER_ID_KEY, sUserID)
+                .set(USER_EVENT_ID_KEY, sEventID)
+                .set(USER_TIMESTAMP_KEY, timestamp)
+                .build();
+        datastore.put(userEntity);
+        // redirects page that refers to userID and eventID
+        response.sendRedirect("/user.html?event=" + sEventID + "&user=" + sUserID); // html will call this servlet that handles user creation
+    }
+  }
 }
