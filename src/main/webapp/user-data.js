@@ -21,7 +21,7 @@ function redirectToLocationPage() {
     window.location.replace("choose-loc.html?" + getUserData());
 }
 
-async function loadResults() {
+function loadResults() {
     const params = new URLSearchParams(window.location.search);
     const event = params.get('event');
     fetch(`/MatchingAlgoDate?text-input=${event}`)
