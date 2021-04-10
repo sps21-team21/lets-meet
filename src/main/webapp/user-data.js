@@ -41,4 +41,47 @@ function loadResults() {
                 datesContainer.innerHTML += `<ul>${dateElems.join('')}</ul>`;
             }
         });
+
+
+    //now for location
+    const geocoder = new google.maps.Geocoder();
+    //issue at fetch
+    const ll = fetch(`/MatchingAlgoLocation?text-input=${event}`);
+    const LatsLangs = ll.json();
+    if(LatsLangs.length == 0){
+        const mapPlace = document.getElementById("locationtext");
+        mapPlace.innerHTML += "There are no locations!";
+    }
+    else{
+        posit = { lat: LatsLangs[0], lng: LatsLangs[1] };
+        addy = geocodeLatLng(geocoder, posit);
+        const mapPlace = document.getElementById("locationtext");
+        mapPlace.innerHTML += "Suggested meet up location is " + addy;
+        const map = new google.maps.Map(document.getElementById("Map"), {
+            zoom: 10,
+            center: posit,
+        });
+        new google.maps.Marker({
+            position: posit,
+            map,
+            title: addy,
+        });
+    }
+}
+
+
+function geocodeLatLng(geocoder, posit) {
+  geocoder.geocode({ location: posit }, (results, status) => {
+    if (status == "OK") {
+      if (results[0] != null) {
+        return results[0].formatted_address;
+      } 
+      else {
+        return "Error Loading Location";
+      }
+    } 
+    else {
+        return "Error Loading Location";
+    }
+  });
 }
