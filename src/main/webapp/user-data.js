@@ -21,7 +21,7 @@ function redirectToLocationPage() {
     window.location.replace("choose-loc.html?" + getUserData());
 }
 
-function loadResults() {
+async function loadResults() {
     const params = new URLSearchParams(window.location.search);
     const event = params.get('event');
     fetch(`/MatchingAlgoDate?text-input=${event}`)
@@ -46,28 +46,32 @@ function loadResults() {
     //now for location
     const geocoder = new google.maps.Geocoder();
     //issue at fetch
-    const ll = fetch(`/MatchingAlgoLocation?text-input=${event}`);
-    const LatsLangs = ll.json();
-    if(LatsLangs.length == 0){
-        const mapPlace = document.getElementById("locationtext");
-        mapPlace.innerHTML += "There are no locations!";
-    }
-    else{
-        posit = { lat: LatsLangs[0], lng: LatsLangs[1] };
-        addy = geocodeLatLng(geocoder, posit);
-        const mapPlace = document.getElementById("locationtext");
-        mapPlace.innerHTML += "Suggested meet up location is " + addy;
-        const map = new google.maps.Map(document.getElementById("Map"), {
-            zoom: 10,
-            center: posit,
+    fetch(`/MatchingAlgoLocation?text-input=${event}`)
+        .then(res => res.json())
+        .then(LatsLangs => {
+            if(LatsLangs.length == 0){
+                const mapPlace = document.getElementById("locationtext");
+                mapPlace.innerHTML += "There are no locations!";
+            }
+            else{
+                posit = { lat: LatsLangs[0], lng: LatsLangs[1] };
+                addy = geocodeLatLng(geocoder, posit);
+                const mapPlace = document.getElementById("locationtext");
+                mapPlace.innerHTML += "Suggested meet up location is " + addy;
+                const map = new google.maps.Map(document.getElementById("Map"), {
+                    zoom: 10,
+                    center: posit,
+                });
+                new google.maps.Marker({
+                    position: posit,
+                    map,
+                    title: addy,
+                });
+            }
         });
-        new google.maps.Marker({
-            position: posit,
-            map,
-            title: addy,
-        });
-    }
+        
 }
+
 
 
 function geocodeLatLng(geocoder, posit) {
@@ -77,7 +81,7 @@ function geocodeLatLng(geocoder, posit) {
         return results[0].formatted_address;
       } 
       else {
-        return "Error Loading Location";
+        return "Error Loading Location" ;
       }
     } 
     else {
