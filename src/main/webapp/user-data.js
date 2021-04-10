@@ -20,3 +20,25 @@ function redirectToCalendarPage() {
 function redirectToLocationPage() {
     window.location.replace("choose-loc.html?" + getUserData());
 }
+
+function loadResults() {
+    const params = new URLSearchParams(window.location.search);
+    const event = params.get('event');
+    fetch(`/MatchingAlgoDate?text-input=${event}`)
+        .then(res => res.json())
+        .then(dates => {
+            const dateFormatter = new Intl.DateTimeFormat(undefined, {
+                weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+            });
+            const dateElems = dates
+                .sort().map(date => new Date(date))
+                .map(date => dateFormatter.format(date))
+                .map(dateStr => `<li>${dateStr}</li>`);
+            const datesContainer = document.getElementById('dates');
+            if (dateElems.length === 0) {
+                datesContainer.innerHTML += `<h4>It seems like there aren't any!</h4>`
+            } else {
+                datesContainer.innerHTML += `<ul>${dateElems.join('')}</ul>`;
+            }
+        });
+}
