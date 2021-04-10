@@ -33,55 +33,41 @@ public class MatchingLocationAlgo extends HttpServlet {
 
         while (results.hasNext()) {
             Entity entity = results.next();
-            
-            //if the user doesn't hasn't input their location yet, then retrieiving it will output an invalid property error
-            try{
-                LatLng temp = entity.getLatLng(USER_LOCATION_KEY);
-                lats.add(temp.getLatitude()*Math.PI/180);
-                longs.add(temp.getLongitude()*Math.PI/180);
-            }
-            catch(Exception e){
-                continue;
-            }
+            LatLng temp = entity.getLatLng(USER_LOCATION_KEY);
+            lats.add(temp.getLatitude()*Math.PI/180);
+            longs.add(temp.getLongitude()*Math.PI/180);
 
         }
 
-        if(lats.size() == 0){
-            Double[] MT = {};
-            Gson bson = new Gson();
-            response.setContentType("application/json;");
-            response.getWriter().println(bson.toJson(MT));
+        //convert lats and longs to spherical coordinates
+        ArrayList<Double> xs =  new ArrayList<>();
+        ArrayList<Double> ys =  new ArrayList<>();
+        ArrayList<Double> zs =  new ArrayList<>();
+        for(int i = 0; i < lats.size(); i++){
+            xs.add(Math.cos(lats.get(i)) * Math.cos(longs.get(i)));
+            ys.add(Math.cos(lats.get(i)) * Math.sin(longs.get(i)));
+            zs.add(Math.sin(lats.get(i)));
         }
-        else{
-            //convert lats and longs to spherical coordinates
-            ArrayList<Double> xs =  new ArrayList<>();
-            ArrayList<Double> ys =  new ArrayList<>();
-            ArrayList<Double> zs =  new ArrayList<>();
-            for(int i = 0; i < lats.size(); i++){
-                xs.add(Math.cos(lats.get(i)) * Math.cos(longs.get(i)));
-                ys.add(Math.cos(lats.get(i)) * Math.sin(longs.get(i)));
-                zs.add(Math.sin(lats.get(i)));
-            }
 
-            double trueX = 0;
-            double trueY = 0;
-            double trueZ = 0;
+        double trueX = 0;
+        double trueY = 0;
+        double trueZ = 0;
 
-            for(int i = 0; i < xs.size(); i++){
-                trueX = trueX + xs.get(i);
-                trueY = trueY + ys.get(i);
-                trueZ = trueZ + zs.get(i);
-            }
-            trueX = trueX / xs.size();
-            trueY = trueY / ys.size();
-            trueZ = trueZ / zs.size();
-
-            Double Hypo = Math.sqrt((trueX * trueX) + (trueY * trueY));
-            Double[] Center = {Math.atan2(trueZ, Hypo)*180/(Math.PI), Math.atan2(trueY,trueX)*180/(Math.PI)};
-            Gson bson = new Gson();
-            response.setContentType("application/json;");
-            response.getWriter().println(bson.toJson(Center));
+        for(int i = 0; i < xs.size(); i++){
+            trueX = trueX + xs.get(i);
+            trueY = trueY + ys.get(i);
+            trueZ = trueZ + zs.get(i);
         }
+        trueX = trueX / xs.size();
+        trueY = trueY / ys.size();
+        trueZ = trueZ / zs.size();
+
+        Double Hypo = Math.sqrt((trueX * trueX) + (trueY * trueY));
+        Double[] Center = {Math.atan2(trueZ, Hypo)*180/(Math.PI), Math.atan2(trueY,trueX)*180/(Math.PI)};
+        Gson bson = new Gson();
+        response.setContentType("application/json;");
+        response.getWriter().println(bson.toJson(Center));
+        
     }
 }
 
