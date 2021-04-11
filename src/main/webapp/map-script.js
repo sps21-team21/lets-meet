@@ -72,7 +72,7 @@ function saveLocation(lat, lng) {
     });
 }
 
-function getLocation() {
+async function getLocation() {
     const responseServ = await fetch('/api/maps');
     const respObj = await responseServ.json();
     return respObj;
