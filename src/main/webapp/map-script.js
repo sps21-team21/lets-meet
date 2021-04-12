@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+function redirectToCalendar() {
+    window.location.replace(`calendar.html${window.location.search}`);
+}
+
 /** Creates and manages map */
 function createMap() {
     const url = new URL(window.location.href);
@@ -25,7 +29,7 @@ function createMap() {
     var coords = new google.maps.LatLng(37.422, -122.084);
 
     if (getLocation() != null) {
-        const coords = Object.values(getLocation());
+        var coords = Object.values(getLocation());
         coords = new google.maps.LatLng(coords[0], coords[1]);
     }
 
@@ -73,7 +77,7 @@ function saveLocation(lat, lng) {
 }
 
 async function getLocation() {
-    const responseServ = await fetch('/api/maps');
+    const responseServ = await fetch(`/api/maps${window.location.search}`);
     const respObj = await responseServ.json();
     return respObj;
 }
