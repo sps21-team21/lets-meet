@@ -49,7 +49,7 @@ public class MatchingDateAlgo extends HttpServlet {
                     }
                 }
                 goodDates = temps;
-                temps.clear();
+                temps = new HashSet<LongValue>();
             }
         }
 

@@ -31,3 +31,15 @@ main {
 .function-button:hover {
     background-color: #5688C7;
 }
+
+ul {
+  list-style: none;
+  display: inline-block;
+  margin-right: 0.4rem;
+  text-align: left;
+  font-size: 16px;
+}
+
+ul li::before {
+  content: "📌  ";
+}
