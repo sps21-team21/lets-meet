@@ -18,18 +18,13 @@ import com.google.cloud.datastore.*;
 import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 import com.google.cloud.datastore.DoubleValue;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,7 +34,7 @@ import static com.google.sps.Constants.*;
 @WebServlet("/api/maps")
 public class MapsServlet extends HttpServlet {
     Datastore datastore;
-    
+
     @Override
     public void init() throws ServletException {
         super.init();
@@ -56,8 +51,7 @@ public class MapsServlet extends HttpServlet {
         List<DoubleValue> coords = List.of();
         try {
             coords = userEntity.getList(USER_LOCATION_KEY);
-        } 
-        catch (DatastoreException ignored) {}
+        } catch (DatastoreException ignored) {}
 
         List<Double> loc = coords.stream().map(Value::get).collect(Collectors.toList());
         String jsonCoords = new Gson().toJson(loc);
@@ -73,9 +67,7 @@ public class MapsServlet extends HttpServlet {
         String event = request.getParameter("event");
         String user = request.getParameter("user");
 
-        List<DoubleValue> coords = List.of();
-        coords.add(DoubleValue.of(lat));
-        coords.add(DoubleValue.of(lng));
+        List<DoubleValue> coords = List.of(DoubleValue.of(lat), DoubleValue.of(lng));
 
         Transaction txn = datastore.newTransaction();
         try {
@@ -87,16 +79,11 @@ public class MapsServlet extends HttpServlet {
                 .build();
             txn.update(updatedUserEntity);
             txn.commit();
-            }
-        finally {
+        } finally {
             if (txn.isActive()) {
                 txn.rollback();
             }
         }
-        // Output
-        /* response.setContentType("text/html; charset=UTF-8");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().println(translatedText); */
     }
 
     private Query<Entity> queryForUser(String eventID, String userID) {
