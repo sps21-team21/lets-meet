@@ -12,8 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+let pos_marker;
+
 function redirectToCalendar() {
-    window.location.replace(`calendar.html${window.location.search}`);
+    const params = new URLSearchParams(window.location.search);
+    params.append('lat', pos_marker.position.lat());
+    params.append('lng', pos_marker.position.lng());
+
+    fetch(`/api/maps?${params.toString()}`, {
+        method: 'POST',
+    }).then(() => {
+        window.location.replace(`calendar.html${window.location.search}`);
+    });
 }
 
 /** Creates and manages map */
@@ -26,18 +36,19 @@ function createMap() {
         user: user
     });
 
-    var coords = new google.maps.LatLng(37.422, -122.084);
+    let coords = new google.maps.LatLng(37.422, -122.084);
 
     if (getLocation() != null) {
-        var coords = Object.values(getLocation());
-        coords = new google.maps.LatLng(coords[0], coords[1]);
+        const new_coords = Object.values(getLocation());
+        coords = new google.maps.LatLng(new_coords[0], new_coords[1]);
     }
 
     const map = new google.maps.Map(
         document.getElementById('map'),
-        {center: coords, zoom: 16});
+        {center: coords, zoom: 16}
+    );
 
-    var pos_marker = new google.maps.Marker({
+    pos_marker = new google.maps.Marker({
         position: coords,
         map: map,
         title: 'User location'
@@ -45,7 +56,7 @@ function createMap() {
 
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function (position) {
-            userLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+            let userLocation = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
             map.setCenter(userLocation);
             pos_marker.setMap(null);
             pos_marker.setMap(map);
@@ -61,23 +72,10 @@ function createMap() {
         pos_marker.setMap(map);
         pos_marker.position = coords;
         pos_marker.center = coords;
-        saveLocation(event.latLng.lat(), event.latLng.lng());
-    });
-}
-
-function saveLocation(lat, lng) {
-    const params = new URLSearchParams();
-    params.append('lat', lat);
-    params.append('lng', lng);
-
-    fetch('/translate', {
-        method: 'POST',
-        body: params
     });
 }
 
 async function getLocation() {
     const responseServ = await fetch(`/api/maps${window.location.search}`);
-    const respObj = await responseServ.json();
-    return respObj;
+    return await responseServ.json();
 }
