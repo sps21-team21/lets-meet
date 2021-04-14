@@ -86,5 +86,6 @@ saveBtn.addEventListener('click', () => {
     } else {
       alert('Error while saving the calendar');
     }
+    window.location.replace(`user.html${window.location.search}`);
   });
 });
