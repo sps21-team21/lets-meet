@@ -33,12 +33,11 @@ public class MatchingLocationAlgo extends HttpServlet {
 
         while (results.hasNext()) {
             Entity entity = results.next();
-            
             //if the user doesn't hasn't input their location yet, then retrieiving it will output an invalid property error
             try{
-                LatLng temp = entity.getLatLng(USER_LOCATION_KEY);
-                lats.add(temp.getLatitude()*Math.PI/180);
-                longs.add(temp.getLongitude()*Math.PI/180);
+                List<DoubleValue> temp = entity.getList(USER_LOCATION_KEY);
+                lats.add(temp.get(0).get()*Math.PI/180);
+                longs.add(temp.get(1).get()*Math.PI/180);
             }
             catch(Exception e){
                 continue;
