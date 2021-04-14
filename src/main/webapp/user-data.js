@@ -64,6 +64,15 @@ function loadResults() {
                         window.alert("Geocoder failed due to: " + status);
                     }
                 })
+                const map = new google.maps.Map(
+                    document.getElementById('map'),
+                    {center: posit, zoom: 16}
+                );
+                pos_marker = new google.maps.Marker({
+                    position: posit,
+                    map: map,
+                    title: 'Recommended location'
+                });
             }
         });
 }
