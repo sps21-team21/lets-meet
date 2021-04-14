@@ -61,7 +61,8 @@ function loadResults() {
                         const mapPlace = document.getElementById("locationtext");
                         mapPlace.innerHTML += "Suggested meet up location is " + formatted_address;
                     } else {
-                        window.alert("Geocoder failed due to: " + status);
+                        const mapPlace = document.getElementById("locationtext");
+                        mapPlace.innerHTML += "Suggested meet up location is unnamed";
                     }
                 })
                 const map = new google.maps.Map(
