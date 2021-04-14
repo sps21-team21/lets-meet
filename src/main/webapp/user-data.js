@@ -54,23 +54,18 @@ function loadResults() {
                 mapPlace.innerHTML += "There are no locations!";
             }
             else{
-                posit = { lat: LatsLangs[0], lng: LatsLangs[1] };
-                addy = geocodeLatLng(geocoder, posit);
-                const mapPlace = document.getElementById("locationtext");
-                mapPlace.innerHTML += "Suggested meet up location is " + addy;
-                const map = new google.maps.Map(document.getElementById("Map"), {
-                    zoom: 10,
-                    center: posit,
-                });
-                new google.maps.Marker({
-                    position: posit,
-                    map,
-                    title: addy,
-                });
+                posit = { lat: parseFloat(LatsLangs[0]), lng: parseFloat(LatsLangs[1]) };
+                geocoder.geocode({location : posit}, (results, status) => {
+                    if (status == "OK") {
+                        var formatted_address = results[0].formatted_address;
+                        const mapPlace = document.getElementById("locationtext");
+                        mapPlace.innerHTML += "Suggested meet up location is " + formatted_address;
+                    } else {
+                        window.alert("Geocoder failed due to: " + status);
+                    }
+                })
             }
         });
-        
-}
 
 
 
