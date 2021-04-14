@@ -40,7 +40,9 @@ function createMap() {
 
     if (getLocation() != null) {
         const new_coords = Object.values(getLocation());
-        coords = new google.maps.LatLng(new_coords[0], new_coords[1]);
+        if(new_coords.length > 1){ 
+            coords = new google.maps.LatLng(new_coords[0], new_coords[1]);
+        }
     }
 
     const map = new google.maps.Map(
